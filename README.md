@@ -20,7 +20,7 @@ __Obs:__ Para teste, foi utilizado um banco de desenvolvimento na nuvem fornecid
 1)  Crie um arquivo `.env`
 2)  Configure as seguintes variáveis de acordo com as informações que compõe a URL fornecida para conexão. Exemplo:
 
-    🔗URL: mongodb+srv://DBTESTE:DBSENHA@cluster123.abcdef.mongodb.net/DBNOME
+`🔗URL: mongodb+srv://DBTESTE:DBSENHA@cluster123.abcdef.mongodb.net/DBNOME`
   ```
   DB_USERNAME=DBTESTE
   DB_PASSWORD=DBSENHA
