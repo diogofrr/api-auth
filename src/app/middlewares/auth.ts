@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express";
-import { JwtPayload } from "jsonwebtoken";
+import { JwtPayload, VerifyErrors } from "jsonwebtoken";
 import jwt from "jsonwebtoken";
-import authHash from "../config/authHash";
+import authHash from "../../config/authHash.json";
 
-type RequestWithUserId = Request & {
+export type RequestWithUserId = Request & {
     userId?: string | JwtPayload,
 };
 
@@ -17,21 +17,22 @@ const authMiddleware = (req: RequestWithUserId, res: Response, next: NextFunctio
     const parts: string[] = authHeader.split(' ');
 
     if(!(parts.length === 2)) {
-        return res.status(401);
+        return res.status(401).send({ error: 'Token error'});
     };
 
     const [ scheme, token ] = parts;
 
-    if (!/^Bearer$/i.test(scheme)){
+    if (!/Bearer/i.test(scheme)){
         return res.status(401).send({ error: 'Token malformatted '});
     };
 
-    jwt.verify(token, authHash.secret, (err, decoded) => {
-        if(err) {
+    jwt.verify(token, authHash.secret, (err: any, decoded: any) => {
+        if(err || typeof decoded === 'string') {
             return res.status(401).send({ error: 'Token invalid' });
         };
-
-        // req.userId = decoded.id;
+            
+        req.userId = decoded.id;
+        return next();
     });
 };
 

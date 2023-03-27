@@ -1,6 +1,5 @@
 import express from "express";
-import authController from "./controllers/authController";
-import projectController from "./controllers/projectController";
+import index from './app/controllers/index';
 
 const porta: number = 8080;
 
@@ -13,5 +12,4 @@ app.listen(porta, () => {
     console.log(`O servidor está ouvindo na porta ${porta}.`)
 });
 
-authController(app);
-projectController(app);
+index(app);

@@ -1,4 +1,4 @@
-import mongoose from "../database";
+import mongoose from "../../database";
 import bcrypt from "bcrypt";
 
 const UserSchema = new mongoose.Schema({
@@ -15,6 +15,14 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
+        select: false,
+    },
+    passwordResetToken: {
+        type: String,
+        select: false,
+    },
+    passwordResetExpires: {
+        type: Date,
         select: false,
     },
     createdAt: {
