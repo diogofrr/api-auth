@@ -1,7 +1,10 @@
 import express from "express";
 import index from './app/controllers/index';
+import { config } from "dotenv";
 
-const porta: number = 8080;
+config();
+
+const porta: number | string = process.env.PORT || 3000;
 
 const app = express();
 
