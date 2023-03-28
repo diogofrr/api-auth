@@ -1,5 +1,5 @@
 import express from "express";
-import index from './app/controllers/index';
+import index from './app/controllers/index.ts';
 import { config } from "dotenv";
 
 config();
