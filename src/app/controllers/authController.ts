@@ -4,7 +4,6 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import bcrypt from "bcrypt";
 
-import { SendMailOptions, TransportOptions } from "nodemailer";
 import { HbsTransporter } from "nodemailer-express-handlebars";
 
 import User from "../models/User"
@@ -19,67 +18,86 @@ function generateToken(params = {}){
     });
 };
 
-router.post('/register', async (req: Request, res: Response) => {
+router.post("/register", async (req: Request, res: Response) => {
     const { email } = req.body;
     
     try{
-        if(await User.findOne({ email })) return res.status(400).send({ error: "User already exists" })
+        if(await User.findOne({ email })) return res.status(400).send({
+            error: true,
+            status: "User already exists",
+        })
 
         const user = await User.create(req.body);
 
         user.password = "";
 
-        return res.send({
+        return res.status(200).send({
+            error: false,
+            status: "Successfully registered",
             user,
             token: generateToken({ id: user.id }),
         });
     } catch(err){
-        return res.status(400).send({ error: "Registration failed"})
+        return res.status(400).send({
+            error: true,
+            status: "Registration failed"
+        })
     }
 });
 
 const authController = (app: Express) => {
-    app.use('/auth', router);
+    app.use("/auth", router);
 }
 
-router.post('/login', async (req: Request, res: Response) => {
+router.post("/login", async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email }).select('+password');
+    const user = await User.findOne({ email }).select("+password");
 
     if(!user) {
-        return res.status(400).send({ error: "User not found" });
+        return res.status(400).send({
+            error: true,
+            status: "User not found",
+        });
     }
 
     if(!await bcrypt.compare(password, user.password)) {
-        return res.status(400).send({ error: "Invalid password"});
+        return res.status(400).send({
+            error: true,
+            status: "Invalid password",
+        });
     }
 
     user.password = "";
 
-    res.send({ 
+    res.status(200).send({
+        error: false,
+        status: "Connected successfully",
         user,
         token:generateToken({ id: user.id }),
     });
 });
 
-router.post('/forgot_password', async (req: Request, res: Response) => {
+router.post("/forgot_password", async (req: Request, res: Response) => {
     const { email }: { email: string } = req.body;
 
     try {
         const user = await User.findOne({ email });
 
         if(!user) {
-            return res.status(400).send({ error: "User not found" });
+            return res.status(400).send({
+                error: true,
+                status: "User not found"
+            });
         }
 
-        const token = crypto.randomBytes(20).toString('hex');
+        const token = crypto.randomBytes(20).toString("hex");
 
         const now = new Date();
         now.setHours(now.getHours() + 1);
         
         await User.findByIdAndUpdate(user.id, {
-            '$set':{
+            "$set":{
                 passwordResetToken: token,
                 passwordResetExpires: now,
             }
@@ -92,51 +110,75 @@ router.post('/forgot_password', async (req: Request, res: Response) => {
             from: "contadeatividades9199@gmail.com",
             template: "auth/forgot_password",
             context: { token },
-          }, (err) => {
+        }, (err) => {
             if(err){
                 console.log(err);
 
-                return res.status(400).send({ error: "Error on forgot password, try again"})
+                return res.status(400).send({
+                    error: true,
+                    status: "Error on forgot password, try again",
+                })
             }
 
-            return res.sendStatus(200);
+            return res.status(200).send({
+                error: false,
+                status: "Email successfully sent",
+            });
         });
 
     } catch(err) {
         console.log(err);
 
-        res.status(400).send({ error: "Error on forgot password, try again"})
+        res.status(400).send({
+            error: true,
+            status: "Error on forgot password, try again",
+        })
     }
 });
 
-router.post('/reset_password', async (req: Request, res: Response) => {
+router.post("/reset_password", async (req: Request, res: Response) => {
     const { email, token, password } = req.body;
     
     try {
         const user = await User.findOne({ email })
-            .select('+passwordResetToken passwordResetExpires');
+            .select("+passwordResetToken passwordResetExpires");
         
         if (!user) {
-            return res.status(400).send({ error: 'User not found' });
+            return res.status(400).send({
+                error: true,
+                status: "User not found",
+            });
         }
 
         if (token !== user.passwordResetToken) {
-            return res.status(400).send({ error: 'Token invalid' });
+            return res.status(400).send({
+                error: true,
+                status: "Token invalid",
+            });
         }
 
         const now = new Date();
 
         if(user.passwordResetExpires !== undefined && now > user.passwordResetExpires){
-            return res.status(400).send({ error: 'Token expired, generate a new one' });
+            return res.status(400).send({
+                error: true,
+                status: "Token expired, generate a new one",
+            });
         }
 
         user.password = password;
 
         await user.save();
 
-        res.sendStatus(200);
+        res.status(200).send({
+            error: false,
+            status: "Password changed successfully"
+        });
     } catch (err) {
-        res.status(400).send({ error: 'Cannot reset password, try again' })
+        res.status(400).send({
+            error: true,
+            status: "Cannot reset password, try again",
+        })
     }
 });
 

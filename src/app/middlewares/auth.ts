@@ -1,13 +1,11 @@
-import { Request, Response, NextFunction } from "express";
-import { JwtPayload, VerifyErrors } from "jsonwebtoken";
+import { Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import authHash from "../../config/authHash.json";
 
-export type RequestWithUserId = Request & {
-    userId?: string | JwtPayload,
-};
+import { TRequestWithUserId } from "../../types/TRequestWithUserId";
 
-const authMiddleware = (req: RequestWithUserId, res: Response, next: NextFunction) => {
+
+const authMiddleware = (req: TRequestWithUserId, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
 
     if(!authHeader) {
