@@ -40,7 +40,14 @@ router.get('/:projectId', async (req: TRequestWithUserId, res: Response) => {
 router.post('/', async (req: TRequestWithUserId, res: Response) => {
     try {
         const { title, description, tasks } = req.body;
-
+        
+        if ((!/.+/si.test(title)) || (!/.+/i.test(description))){
+            return res.status(400).send({
+                error: true,
+                status: 'Invalid data'
+            });
+        };
+        
         const project: any = await Project.create({ title, description, user: req.userId });
 
         await Promise.all(tasks.map(async (task: any)  => {
@@ -53,7 +60,10 @@ router.post('/', async (req: TRequestWithUserId, res: Response) => {
 
         await project.save();
 
-        return res.send({ project });
+        return res.send({
+            error: false,
+            project
+        });
     } catch (err) {
         return res.status(400).send({
             error: true,
@@ -65,6 +75,13 @@ router.post('/', async (req: TRequestWithUserId, res: Response) => {
 router.put('/:projectId', async (req: TRequestWithUserId, res: Response) => {
     try {
         const { title, description, tasks } = req.body;
+        
+        if ((!/.+/si.test(title)) || (!/.+/i.test(description))){
+            return res.status(400).send({
+                error: true,
+                status: 'Invalid data'
+            });
+        };
 
         const project: any = await Project.findByIdAndUpdate(req.params.projectId, { title, description }, { new: true });
 
