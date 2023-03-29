@@ -31,8 +31,14 @@ __Obs:__ Para teste, foi utilizado um banco de desenvolvimento na nuvem fornecid
 ## 🛣 Rotas
 
 * As primeiras rotas da API serão de autenticação e antecedidas pela rota `/auth`.
-  * `/register` - Cadastra um usuário
-  * `/login` - Autentica um usuário
-  * `forgot_password` - Envia um email para trocar a senha
-  * `reset_password` - Troca a senha
+  * `POST: /register` - Cadastra um usuário
+  * `POST: /login` - Autentica um usuário
+  * `POST: /forgot_password` - Envia um email para trocar a senha
+  * `POST: /reset_password` - Troca a senha
   
+* Após a autenticação, serão liberadas as rotas de CRUD antecedidas por `/projects`.
+  * `GET: /` - Visualizar todos os projetos
+  * `GET: /:projectId` - Visualiza somente um projeto
+  * `POST: /` - Cria um novo projeto
+  * `PUT: /:projectId` - Atualiza um projeto
+  * `DELETE: /:projectId` - Deleta um projeto
