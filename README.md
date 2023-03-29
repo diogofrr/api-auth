@@ -1,8 +1,8 @@
 # API de autenticação
 Esta é minha primeira API feita utilizando Typescript, Express, Mongoose, JWT e MongoDB. 
 
-* Status: Em Desenvolvimento 🚧
-
+* Status: Concluído ✅
+* Link: https://authcrud-api.onrender.com/
 ---------------
 ## 🌟 Instalando
 1) Clone o repositório
