@@ -60,9 +60,9 @@ router.post('/', async (req: TRequestWithUserId, res: Response) => {
 
         await project.save();
 
-        return res.send({
+        return res.status(200).send({
             error: false,
-            project
+            project,
         });
     } catch (err) {
         return res.status(400).send({
