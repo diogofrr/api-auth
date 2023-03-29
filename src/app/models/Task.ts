@@ -1,4 +1,4 @@
-import mongoose from "../../database";
+import mongoose from "../../database/index";
 
 const TaskSchema = new mongoose.Schema({
     title: {

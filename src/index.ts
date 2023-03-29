@@ -1,6 +1,9 @@
 import express from "express";
-import index from './app/controllers/index.ts';
+// import index from './app/controllers/';
 import { config } from "dotenv";
+
+import authController from "./app/controllers/authController";
+import projectController from "./app/controllers/projectController";
 
 config();
 
@@ -15,4 +18,5 @@ app.listen(porta, () => {
     console.log(`O servidor está ouvindo na porta ${porta}.`)
 });
 
-index(app);
+authController(app);
+projectController(app);

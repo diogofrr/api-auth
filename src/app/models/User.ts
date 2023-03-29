@@ -1,4 +1,4 @@
-import mongoose from "../../database";
+import mongoose from "../../database/index";
 import bcrypt from "bcrypt";
 
 const UserSchema = new mongoose.Schema({

@@ -37,7 +37,7 @@ __Obs:__ Para teste, foi utilizado um banco de desenvolvimento na nuvem fornecid
   * `POST: /reset_password` - Troca a senha
   
 * Após a autenticação, serão liberadas as rotas de CRUD antecedidas por `/projects`.
-  * `GET: /` - Visualizar todos os projetos
+  * `GET: /` - Visualiza todos os projetos
   * `GET: /:projectId` - Visualiza somente um projeto
   * `POST: /` - Cria um novo projeto
   * `PUT: /:projectId` - Atualiza um projeto
