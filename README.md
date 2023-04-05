@@ -26,6 +26,7 @@ __Obs:__ Para teste, foi utilizado um banco de desenvolvimento na nuvem fornecid
   DB_PASSWORD=DBSENHA
   DB_CLUSTER=cluster123.abcdef.mongodb.net
   DB_NAME=DBNOME
+  PORT=8080
   ```
 
 ## 🛣 Rotas
