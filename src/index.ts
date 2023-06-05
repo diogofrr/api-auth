@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 // import index from './app/controllers/';
 import { config } from "dotenv";
 
@@ -11,15 +12,14 @@ const porta: number | string = process.env.PORT || 3000;
 
 const app = express();
 
+const corsOptions = {
+    origin: process.env.APP_URL,
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  }
+
+app.use(cors(corsOptions))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", process.env.URL);
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  next();
-});
 
 app.listen(porta, () => {
     console.log(`O servidor está ouvindo na porta ${porta}.`)
